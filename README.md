@@ -14,7 +14,11 @@ by the biological structure of the data.
 ## Repository Structure
 
 ├── README.md
+
 ├── K-mer Test.ipynb # Jupyter Notebook for analysis
+
 ├── Plots.rmd # R Markdown script to generate plots
+
 ├── ecoli_vmeasure.png # V-measure plot for RNA dataset
+
 ├── mopb_vmeasure.png # V-measure plot for protein dataset
