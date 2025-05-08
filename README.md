@@ -22,3 +22,11 @@ Plots.rmd  R Markdown script to generate plots
 ecoli_vmeasure.png  V-measure plot for RNA dataset
 
 mopb_vmeasure.png  V-measure plot for protein dataset
+
+## Results
+
+### 1. E. coli noncoding RNAs
+![E. coli V-measure](./ecoli_vmeasure.png)
+
+### 2. MopB family proteins
+![MopB V-measure](./mopb_vmeasure.png)
