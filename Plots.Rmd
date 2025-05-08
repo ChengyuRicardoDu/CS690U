@@ -1,0 +1,113 @@
+---
+title: "CS690U_Plots"
+author: "Chengyu Du"
+date: "2025-05-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+
+```{r}
+# Data
+mopb <- data.frame(
+  Model = c(
+    "ProGen2-xl(mid)", "ESM2-3B(last)", "ProGen2-med(mid)", "ProtT5-UR50(mid)", "ESM2-650M(last)",
+    "ProGen2-lg(mid)", "ProtT5-UR50 (last)", "ESM2-150M(mid)", "ESM2-650M (mid)",
+    "Hierarchical (k=3)", "ProtT5-BFD(mid)", "ESM2-150M (last)", "ProGen2-sm(last)",
+    "ESM2-35M(last)", "ESM2-3B (mid)", "ProtT5-BFD (last)", "ProGen2-xl (last)",
+    "ESM3-open(last)", "ProGen2-med (last)", "ESM2-35M (mid)", "ProGen2-sm (mid)",
+    "ProGen2-lg (last)", "ESM2-8M(last)", "Hierarchical (k=2)", "GMM (k=3)",
+    "ESM3-open (mid)", "KMeans (k=3)", "ESM2-8M (mid)", "KMeans (k=2)", "GMM (k=2)"
+  ),
+  Vmeasure = c(
+    0.9081, 0.9024, 0.8786, 0.8721, 0.8719, 0.8477, 0.8476, 0.8431, 0.8403,
+    0.8391, 0.8282, 0.7993, 0.7851, 0.7843, 0.7762, 0.7658, 0.7590,
+    0.7454, 0.7369, 0.7366, 0.7298, 0.6677, 0.6537, 0.6533, 0.6502,
+    0.6034, 0.5917, 0.5332, 0.4845, 0.4845
+  )
+)
+
+
+mopb$Type <- case_when(
+  grepl("k=|Hierarchical|KMeans|GMM", mopb$Model) ~ "k-mer",
+  grepl("\\(mid\\)", mopb$Model) ~ "DGEB_MID",
+  grepl("\\(last\\)", mopb$Model) ~ "DGEB_LAST",
+  TRUE ~ "Unknown"
+)
+
+
+p_mopb <- ggplot(mopb, aes(x = reorder(Model, Vmeasure), y = Vmeasure, fill = Type)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "MopB Clustering (V-measure)",
+    x = NULL,
+    y = "V-measure"
+  ) +
+  scale_fill_manual(
+    values = c("DGEB_MID" = "#F4A261", "DGEB_LAST" = "#457B9D", "k-mer" = "#2A9D8F"),
+    name = "Model Type"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "bottom")
+
+png("mopb_vmeasure.png", width = 1200, height = 900, res = 150)
+print(p_mopb)
+dev.off()
+
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+ecoli <- data.frame(
+  Model = c(
+    "Evo-1-131k(mid)", "Evo-1-8k(last)", "Evo-1-8k(mid)", "Evo-1-131k(last)",
+    "KMeans (k=4)", "GMM (k=4)", "KMeans (k=3)", "GMM (k=3)", "GMM (k=2)",
+    "Hierarchical (k=2)", "KMeans (k=2)", "Hierarchical (k=3)",
+    "NT-500M(last)", "NT-250M(last)", "NT-50M(last)",
+    "NT-2.5B(mid)", "NT-500M(mid)", "NT-250M(mid)",
+    "NT-100M(last)", "Hierarchical (k=4)", "NT-2.5B(last)",
+    "NT-100M(mid)", "NT-50M(mid)"
+  ),
+  Vmeasure = c(
+    0.6805, 0.6605, 0.6510, 0.6266, 0.4684, 0.4684, 0.3779, 0.3779, 0.3725,
+    0.3629, 0.3342, 0.3031, 0.2310, 0.2268, 0.1999,
+    0.1895, 0.1787, 0.1558, 0.1429, 0.1394, 0.1225, 0.1190, 0.0395
+  )
+)
+
+
+ecoli$Type <- case_when(
+  grepl("k=|Hierarchical|KMeans|GMM", ecoli$Model) ~ "k-mer",
+  grepl("\\(mid\\)", ecoli$Model) ~ "DGEB_MID",
+  grepl("\\(last\\)", ecoli$Model) ~ "DGEB_LAST",
+  TRUE ~ "Unknown"
+)
+
+
+p_ecoli <- ggplot(ecoli, aes(x = reorder(Model, Vmeasure), y = Vmeasure, fill = Type)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "E. coli RNA Clustering (V-measure)",
+    x = NULL,
+    y = "V-measure"
+  ) +
+  scale_fill_manual(
+    values = c("DGEB_MID" = "#F4A261", "DGEB_LAST" = "#457B9D", "k-mer" = "#2A9D8F"),
+    name = "Model Type"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "bottom")
+
+png("ecoli_vmeasure.png", width = 1200, height = 900, res = 150)
+print(p_ecoli)
+dev.off()
+```
+
